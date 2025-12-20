@@ -92,29 +92,11 @@ This document catalogs all endpoints tested in the test suite, organized by func
 
 ### Family Visualization Endpoints
 
-#### Secondary Structure Image
-- **URL**: `/family/{acc}/image`
-- **Methods**: GET
-- **Description**: Secondary structure diagram
-- **Tests**: `test_family.py`
-
 #### Thumbnail
 - **URL**: `/family/{acc}/thumbnail`
 - **Methods**: GET
 - **Description**: Thumbnail image of structure
 - **Tests**: `test_family.py`
-
-#### Sunburst
-- **URL**: `/family/{acc}/sunburst`
-- **Methods**: GET
-- **Description**: Taxonomic distribution sunburst chart
-- **Tests**: `test_species_tree.py`
-
-#### VARNA
-- **URL**: `/family/{acc}/varna`
-- **Methods**: GET
-- **Description**: VARNA applet data for structure visualization
-- **Tests**: Not currently tested
 
 ---
 
@@ -216,20 +198,6 @@ This document catalogs all endpoints tested in the test suite, organized by func
 - **Methods**: GET
 - **Tests**: `test_browse.py`
 
-### Browse Genomes
-
-#### All Genomes
-- **URL**: `/genomes`
-- **Methods**: GET
-- **Tests**: `test_browse.py`, `test_genome.py`
-
-#### By Kingdom
-- **URL**: `/genomes/{kingdom}`
-- **Methods**: GET
-- **Kingdoms**: Bacteria, Eukaryota, Archaea, Viruses
-- **Examples**: `/genomes/Bacteria`
-- **Tests**: `test_browse.py`, `test_genome.py`
-
 ### Browse Motifs
 - **URL**: `/motifs`
 - **Methods**: GET
@@ -249,22 +217,6 @@ This document catalogs all endpoints tested in the test suite, organized by func
 - **URL**: `/search`
 - **Methods**: GET
 - **Description**: Main search page with all search forms
-- **Tests**: `test_search.py`
-
-### Sequence Search
-
-#### Submit Search
-- **URL**: `/search/sequence`
-- **Methods**: POST
-- **Parameters**:
-  - `sequence`: RNA/DNA sequence (max ~7,000 nt)
-- **Returns**: Job ID or redirects to results
-- **Tests**: `test_search.py`
-
-#### Get Results
-- **URL**: `/search/sequence/{job_id}`
-- **Methods**: GET
-- **Formats**: HTML, JSON, XML, GFF3, TSV
 - **Tests**: `test_search.py`
 
 ### Batch Search
@@ -352,12 +304,6 @@ This document catalogs all endpoints tested in the test suite, organized by func
 ---
 
 ## Tree and Visualization Endpoints
-
-### Species Tree
-- **URL**: `/speciestree`
-- **Methods**: GET
-- **Description**: Interactive species tree viewer
-- **Tests**: `test_species_tree.py`
 
 ### MSA Viewer
 - Typically embedded in family pages

@@ -55,25 +55,3 @@ class TestGenomeDataEndpoints:
         assert response.status_code in [200, 404, 400, 302]
 
 
-class TestGenomeBrowse:
-    """Test genome browsing functionality."""
-
-    @pytest.mark.ui
-    def test_genomes_index_page(self, session, base_url, timeout):
-        """Test the genomes browse index page."""
-        url = f"{base_url}/genomes"
-        response = session.get(url, timeout=timeout)
-        assert response.status_code == 200
-        assert 'text/html' in response.headers['Content-Type']
-
-    @pytest.mark.ui
-    @pytest.mark.parametrize("kingdom", ["Bacteria", "Eukaryota", "Archaea", "Viruses"])
-    def test_genomes_by_kingdom(self, session, base_url, timeout, kingdom):
-        """Test genome browsing by kingdom.
-
-        Note: Some kingdoms may return error pages even with 200 status.
-        """
-        url = f"{base_url}/genomes/{kingdom}"
-        response = session.get(url, timeout=timeout)
-        # Endpoint should return 200, content may vary
-        assert response.status_code == 200

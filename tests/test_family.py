@@ -220,14 +220,6 @@ class TestFamilyImageEndpoints:
     """Test family image and visualization endpoints."""
 
     @pytest.mark.api
-    def test_family_image_endpoint(self, session, base_url, timeout):
-        """Test secondary structure image endpoint."""
-        url = f"{base_url}/family/RF00001/image"
-        response = session.get(url, timeout=timeout, allow_redirects=True)
-        # Images might be served from different locations
-        assert response.status_code in [200, 302, 303, 404]
-
-    @pytest.mark.api
     def test_family_thumbnail_endpoint(self, session, base_url, timeout):
         """Test thumbnail image endpoint."""
         url = f"{base_url}/family/RF00001/thumbnail"
