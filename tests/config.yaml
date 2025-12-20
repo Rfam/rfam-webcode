@@ -1,0 +1,83 @@
+# Rfam Test Suite Configuration
+
+# Base URL for the Rfam website
+base_url: "https://rfam.org"
+
+# Test timeouts (seconds)
+timeout: 30
+long_timeout: 60
+
+# Sample test data for each entity type
+test_data:
+  families:
+    - acc: "RF00001"
+      id: "5S_rRNA"
+      description: "5S ribosomal RNA"
+    - acc: "RF00002"
+      id: "5_8S_rRNA"
+      description: "5.8S ribosomal RNA"
+    - acc: "RF00005"
+      id: "tRNA"
+      description: "tRNA"
+    - acc: "RF00167"
+      id: "Purine"
+      description: "Purine riboswitch"
+
+  clans:
+    - acc: "CL00001"
+      id: "tRNA"
+    - acc: "CL00002"
+      id: "SAM"
+    - acc: "CL00012"
+      id: "CRW"
+
+  genomes:
+    - ncbi_id: "511145"
+      name: "Escherichia coli str. K-12"
+    - ncbi_id: "559292"
+      name: "Saccharomyces cerevisiae"
+
+  motifs:
+    - acc: "RM00001"
+      id: "KINK-TURN"
+    - acc: "RM00002"
+      id: "LOOP-E"
+
+# Alignment formats to test
+alignment_formats:
+  - "stockholm"
+  - "pfam"
+  - "fasta"
+  - "clustal"
+  - "phylip"
+  - "psiblast"
+
+# Browse endpoints to test
+browse_endpoints:
+  families:
+    - "/families"
+    - "/families/A"
+    - "/families/with_structure"
+    - "/families/top20"
+  clans:
+    - "/clans"
+  genomes:
+    - "/genomes"
+    - "/genomes/Bacteria"
+    - "/genomes/Eukaryota"
+    - "/genomes/Archaea"
+    - "/genomes/Viruses"
+  motifs:
+    - "/motifs"
+
+# Content types to test
+content_types:
+  html: "text/html"
+  json: "application/json"
+  xml: "text/xml"
+  plain: "text/plain"
+
+# Search test sequences
+search_sequences:
+  valid_short: "GCCUAAAGCCUAAAGCCUAAAGCCUAAAGCCUAAAG"
+  valid_medium: "AUGCUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAAGCGUAA"
