@@ -1,0 +1,5 @@
+django>=6.0
+djangorestframework>=3.16
+pymysql>=1.1.2
+pyyaml>=6.0
+python-dotenv>=1.2

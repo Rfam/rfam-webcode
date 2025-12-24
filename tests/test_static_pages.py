@@ -147,6 +147,74 @@ class TestSecurityHeaders:
             assert headers['X-Frame-Options'] in ['DENY', 'SAMEORIGIN', 'ALLOW', 'ALLOW-FROM']
 
 
+class TestSubmitAlignment:
+    """Test the alignment submission page."""
+
+    @pytest.mark.ui
+    def test_submit_alignment_page_loads(self, session, base_url, timeout):
+        """Test that the submit alignment page loads successfully."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+        assert response.status_code == 200
+        assert 'text/html' in response.headers['Content-Type']
+
+    @pytest.mark.ui
+    def test_submit_alignment_has_form(self, session, base_url, timeout):
+        """Test that the submit alignment page contains a submission form."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Should have a form element
+        form = soup.find('form')
+        assert form is not None, "Page should contain a form element"
+
+    @pytest.mark.ui
+    def test_submit_alignment_has_required_fields(self, session, base_url, timeout):
+        """Test that the form has required fields: name, email, comments, alignment."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        text = response.text.lower()
+
+        # Check for required field labels/inputs
+        assert 'name' in text, "Form should have a name field"
+        assert 'email' in text, "Form should have an email field"
+        assert 'comment' in text, "Form should have a comments field"
+        assert 'alignment' in text, "Form should have an alignment field"
+
+    @pytest.mark.ui
+    def test_submit_alignment_has_new_family_option(self, session, base_url, timeout):
+        """Test that the form has option for new family vs existing family."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+
+        text = response.text.lower()
+
+        # Should have new family option and accession field
+        assert 'new family' in text or 'newfamily' in text, "Form should have new family option"
+        assert 'accession' in text, "Form should have accession field for existing families"
+
+    @pytest.mark.ui
+    def test_submit_alignment_mentions_stockholm_format(self, session, base_url, timeout):
+        """Test that the page mentions Stockholm format requirement."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+
+        text = response.text.lower()
+        assert 'stockholm' in text, "Page should mention Stockholm format"
+
+    @pytest.mark.ui
+    def test_submit_alignment_has_pubmed_field(self, session, base_url, timeout):
+        """Test that the form has PubMed ID field for new family submissions."""
+        url = f"{base_url}/submit_alignment"
+        response = session.get(url, timeout=timeout)
+
+        text = response.text.lower()
+        assert 'pubmed' in text, "Form should have PubMed ID field"
+
+
 class TestErrorPages:
     """Test error page handling."""
 
