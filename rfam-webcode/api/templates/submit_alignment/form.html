@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit an alignment{% if accession %} for {{ accession }}{% endif %} - Rfam</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .preamble {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        label.required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.25);
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+        }
+        .form-check-label {
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .errorlist {
+            color: #dc3545;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+        }
+        .help-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .inactive {
+            color: #999;
+        }
+        .field-disabled .form-control {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="preamble">
+        <h1>Submit an alignment{% if accession %} for {{ accession }}{% endif %}</h1>
+        <p>
+            This form allows you to upload a Stockholm-format alignment for consideration
+            as a new alignment for an existing Rfam family or as the basis for an
+            entirely new family.
+        </p>
+        <p>
+            Please complete all of the required fields (marked with <span style="color: #dc3545;">*</span>).
+            If this is a new family then you must supply a PubMed ID for a supporting reference.
+            If this alignment is intended as a replacement for an existing family, you must
+            supply the accession for the family.
+        </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="annotationSubmission">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_name" class="required">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <ul class="errorlist">
+                {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email" class="required">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <ul class="errorlist">
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_comments">Comments</label>
+            {{ form.comments }}
+            {% if form.comments.errors %}
+                <ul class="errorlist">
+                {% for error in form.comments.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_alignment" class="required">Alignment (Stockholm format)</label>
+            {{ form.alignment }}
+            <p class="help-text">
+                Upload a Stockholm-format alignment file (.sto, .stockholm, or .txt).
+                File must start with "# STOCKHOLM 1.0" and end with "//".
+            </p>
+            {% if form.alignment.errors %}
+                <ul class="errorlist">
+                {% for error in form.alignment.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <div class="form-check">
+                {{ form.new_family }}
+                <label for="id_new_family" class="form-check-label">This is a new family</label>
+            </div>
+        </div>
+
+        <div class="form-group" id="accession-group">
+            <label for="id_accession" id="accession-label">Accession</label>
+            {{ form.accession }}
+            <p class="help-text">Required if submitting a replacement alignment for an existing family.</p>
+            {% if form.accession.errors %}
+                <ul class="errorlist">
+                {% for error in form.accession.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group" id="pmid-group">
+            <label for="id_pmid" id="pmid-label">PubMed ID</label>
+            {{ form.pmid }}
+            <p class="help-text">Required if submitting a new family.</p>
+            {% if form.pmid.errors %}
+                <ul class="errorlist">
+                {% for error in form.pmid.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+            <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
+        <button type="submit" class="btn">Submit</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var newFamilyCheckbox = document.getElementById('id_new_family');
+            var accessionGroup = document.getElementById('accession-group');
+            var accessionInput = document.getElementById('id_accession');
+            var accessionLabel = document.getElementById('accession-label');
+            var pmidGroup = document.getElementById('pmid-group');
+            var pmidLabel = document.getElementById('pmid-label');
+
+            function updateFields() {
+                if (newFamilyCheckbox.checked) {
+                    // New family: disable accession, require pmid
+                    accessionInput.disabled = true;
+                    accessionGroup.classList.add('field-disabled');
+                    accessionLabel.classList.add('inactive');
+                    accessionLabel.classList.remove('required');
+                    pmidLabel.classList.add('required');
+                } else {
+                    // Existing family: require accession, disable pmid requirement
+                    accessionInput.disabled = false;
+                    accessionGroup.classList.remove('field-disabled');
+                    accessionLabel.classList.remove('inactive');
+                    accessionLabel.classList.add('required');
+                    pmidLabel.classList.remove('required');
+                }
+            }
+
+            // Initial state
+            updateFields();
+
+            // Update on checkbox change
+            newFamilyCheckbox.addEventListener('change', updateFields);
+        });
+    </script>
+</body>
+</html>

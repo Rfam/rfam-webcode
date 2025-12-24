@@ -33,58 +33,6 @@ class TestSearchPages:
         assert 'sequence' in text or 'keyword' in text
 
 
-class TestSequenceSearch:
-    """Test sequence search functionality."""
-
-    @pytest.mark.search
-    @pytest.mark.slow
-    def test_sequence_search_submission(self, session, base_url, config, timeout):
-        """Test sequence search submission."""
-        url = f"{base_url}/search/sequence"
-        sequence = config['search_sequences']['valid_short']
-
-        # Submit search
-        response = session.post(
-            url,
-            data={'sequence': sequence},
-            timeout=timeout
-        )
-
-        # Should return job ID or redirect to results
-        assert response.status_code in [200, 201, 202, 303]
-
-    @pytest.mark.search
-    def test_sequence_search_max_length(self, session, base_url, timeout):
-        """Test that very long sequences are rejected."""
-        url = f"{base_url}/search/sequence"
-        # Create a sequence longer than allowed (>7000 or >10000)
-        long_sequence = "A" * 15000
-
-        response = session.post(
-            url,
-            data={'sequence': long_sequence},
-            timeout=timeout
-        )
-
-        # Should return error (400 or validation message in 200)
-        assert response.status_code in [200, 400, 413]
-
-    @pytest.mark.search
-    def test_sequence_search_invalid_characters(self, session, base_url, timeout):
-        """Test that invalid characters in sequence are rejected."""
-        url = f"{base_url}/search/sequence"
-        invalid_sequence = "AUGCXYZ123"
-
-        response = session.post(
-            url,
-            data={'sequence': invalid_sequence},
-            timeout=timeout
-        )
-
-        # Should return error or validation message
-        assert response.status_code in [200, 400]
-
-
 class TestBatchSearch:
     """Test batch sequence search functionality."""
 

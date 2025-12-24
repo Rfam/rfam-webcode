@@ -1,0 +1,42 @@
+# Rfam website source (Perl/Catalyst) - keep local only
+rfam-website/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+.env
+
+# Virtual environments
+tests/venv/
+rfam-webcode/venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.html
+!tests/*.html
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local

@@ -2,6 +2,8 @@
 
 # Base URL for the Rfam website
 base_url: "https://rfam.org"
+# For local Django development, use:
+# base_url: "http://localhost:8888"
 
 # Test timeouts (seconds)
 timeout: 30
