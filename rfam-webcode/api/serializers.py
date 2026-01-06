@@ -54,10 +54,11 @@ class FamilyDetailSerializer(serializers.ModelSerializer):
     curation = serializers.SerializerMethodField()
     cm = serializers.SerializerMethodField()
     release = serializers.SerializerMethodField()
+    clan = serializers.SerializerMethodField()
 
     class Meta:
         model = Family
-        fields = ['acc', 'id', 'description', 'comment', 'curation', 'cm', 'release']
+        fields = ['acc', 'id', 'description', 'comment', 'curation', 'cm', 'release', 'clan']
 
     def get_curation(self, obj):
         return {
@@ -89,12 +90,28 @@ class FamilyDetailSerializer(serializers.ModelSerializer):
             version = DbVersion.objects.order_by('-rfam_release').first()
             if version:
                 return {
-                    'number': version.rfam_release,
                     'date': version.rfam_release_date.strftime('%Y-%m-%d') if version.rfam_release_date else '',
+                    'number': f"{version.rfam_release:.2f}" if version.rfam_release else '0.00',
                 }
         except Exception:
             pass
-        return {'number': 0, 'date': ''}
+        return {'date': '', 'number': '0.00'}
+
+    def get_clan(self, obj):
+        # Get clan membership for this family
+        from .models import ClanMembership
+        try:
+            membership = ClanMembership.objects.select_related('clan_acc').filter(
+                rfam_acc=obj.rfam_acc
+            ).first()
+            if membership:
+                return {
+                    'acc': membership.clan_acc.clan_acc,
+                    'id': membership.clan_acc.id,
+                }
+        except Exception:
+            pass
+        return {'acc': None, 'id': None}
 
 
 class FamilyListSerializer(serializers.ModelSerializer):
