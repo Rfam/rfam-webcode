@@ -13,14 +13,21 @@ urlpatterns = [
 
     # Family endpoints
     path('family/<str:entry>', views.FamilyView.as_view(), name='family'),
+    path('family/<str:entry>/acc', views.FamilyAccView.as_view(), name='family-acc'),
+    path('family/<str:entry>/id', views.FamilyIdView.as_view(), name='family-id'),
     path('family/<str:entry>/alignment', views.FamilyAlignmentView.as_view(), name='family-alignment'),
+    path('family/<str:entry>/alignment/<str:aln_format>', views.FamilyAlignmentView.as_view(), name='family-alignment-format'),
     path('family/<str:entry>/tree', views.FamilyTreeView.as_view(), name='family-tree'),
+    path('family/<str:entry>/tree/', views.FamilyTreeView.as_view(), name='family-tree-slash'),
     path('family/<str:entry>/tree/<str:subtype>', views.FamilyTreeView.as_view(), name='family-tree-subtype'),
+    path('family/<str:entry>/tree/label/<str:label>/image', views.FamilyTreeImageView.as_view(), name='family-tree-label-image'),
+    path('family/<str:entry>/tree/label/<str:label>/map', views.FamilyTreeMapView.as_view(), name='family-tree-label-map'),
     path('family/<str:entry>/cm', views.FamilyCMView.as_view(), name='family-cm'),
     path('family/<str:entry>/regions', views.FamilyRegionsView.as_view(), name='family-regions'),
     path('family/<str:entry>/refseq', views.FamilyRegionsView.as_view(), name='family-refseq'),
     path('family/<str:entry>/structures', views.FamilyStructuresView.as_view(), name='family-structures'),
     path('family/<str:entry>/thumbnail', views.FamilyThumbnailView.as_view(), name='family-thumbnail'),
+    path('family/<str:entry>/image/<str:image_type>', views.FamilyImageView.as_view(), name='family-image'),
 
     # Families browse
     path('families', views.FamiliesListView.as_view(), name='families'),

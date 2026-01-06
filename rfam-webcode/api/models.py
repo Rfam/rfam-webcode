@@ -199,6 +199,7 @@ class FullRegion(models.Model):
         Family,
         on_delete=models.DO_NOTHING,
         db_column='rfam_acc',
+        primary_key=True,  # Use composite key with rfam_acc
         related_name='full_regions'
     )
     rfamseq_acc = models.CharField(max_length=25)
@@ -322,3 +323,19 @@ class DatabaseLink(models.Model):
     class Meta:
         managed = False
         db_table = 'database_link'
+
+
+class AlignmentAndTree(models.Model):
+    """Alignment and tree data stored as blobs."""
+    rfam_acc = models.CharField(max_length=7, primary_key=True)
+    type = models.CharField(max_length=20)  # 'seed', 'full', etc.
+    alignment = models.BinaryField(null=True, blank=True)
+    tree = models.BinaryField(null=True, blank=True)
+    treemethod = models.CharField(max_length=50, null=True, blank=True)
+    average_length = models.FloatField(null=True, blank=True)
+    percent_id = models.FloatField(null=True, blank=True)
+    number_of_sequences = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'alignment_and_tree'

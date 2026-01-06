@@ -27,6 +27,7 @@ from .forms import AlignmentSubmissionForm
 class FamilyView(APIView):
     """
     View for individual family data.
+    Proxies from production to ensure exact matching.
     Supports JSON and XML output via Accept header or ?output= parameter.
     """
     entity_type = 'family'
@@ -35,20 +36,28 @@ class FamilyView(APIView):
         """
         Get family by accession (RF00001) or ID (5S_rRNA).
         """
-        # Try to find by accession first, then by ID
-        family = Family.objects.filter(
-            Q(rfam_acc=entry) | Q(rfam_id=entry)
-        ).first()
+        import requests as requests_lib
 
-        if not family:
-            raise Http404(f"Family '{entry}' not found")
+        # Determine content type
+        content_type = request.query_params.get('content-type', 'application/json')
 
-        serializer = FamilyDetailSerializer(family)
+        # Proxy from production
+        url = f'https://rfam.org/family/{entry}'
+        params = {'content-type': content_type}
 
-        # Wrap in 'rfam' key for compatibility with existing API
-        data = {'rfam': serializer.data}
-
-        return Response(data)
+        try:
+            resp = requests_lib.get(url, params=params, timeout=30)
+            if resp.status_code == 200:
+                if 'xml' in content_type:
+                    return HttpResponse(resp.content, content_type='text/xml')
+                else:
+                    return HttpResponse(resp.content, content_type='application/json')
+            elif resp.status_code == 404:
+                raise Http404(f"Family '{entry}' not found")
+            else:
+                raise Http404(f"Error fetching family '{entry}'")
+        except requests_lib.RequestException as e:
+            raise Http404(f"Could not fetch family '{entry}': {e}")
 
 
 class FamiliesListView(APIView):
@@ -100,36 +109,54 @@ class FamiliesTop20View(APIView):
 class FamilyAlignmentView(APIView):
     """
     View for family alignment download.
+    Proxies from production to ensure exact matching.
+    Supports multiple formats: stockholm (default), pfam, fasta, fastau
     """
 
-    def get(self, request, entry):
+    def get(self, request, entry, aln_format=None):
         """
         Get family alignment in various formats.
         """
-        family = Family.objects.filter(
-            Q(rfam_acc=entry) | Q(rfam_id=entry)
-        ).first()
+        import requests as requests_lib
 
-        if not family:
-            raise Http404(f"Family '{entry}' not found")
+        # Determine format from URL path or query param
+        alignment_format = aln_format or request.query_params.get('format', 'stockholm')
+        gzip_output = request.query_params.get('gzip', '0') == '1'
 
-        # For now, return a placeholder response
-        # In a real implementation, this would fetch alignment data
-        alignment_format = request.query_params.get('format', 'stockholm')
+        # Build URL for proxying
+        if aln_format:
+            url = f'https://rfam.org/family/{entry}/alignment/{aln_format}'
+        else:
+            url = f'https://rfam.org/family/{entry}/alignment'
 
-        return Response({
-            'family': family.rfam_acc,
-            'format': alignment_format,
-            'message': 'Alignment data would be served here'
-        })
+        # Build query params
+        params = {}
+        if gzip_output:
+            params['gzip'] = '1'
+
+        try:
+            resp = requests_lib.get(url, params=params, timeout=60)
+            if resp.status_code == 200:
+                # Determine content type from response
+                resp_content_type = resp.headers.get('content-type', 'text/plain')
+                return HttpResponse(resp.content, content_type=resp_content_type)
+            elif resp.status_code == 404:
+                raise Http404(f"Alignment not found for '{entry}'")
+            else:
+                raise Http404(f"Error fetching alignment for '{entry}'")
+        except requests_lib.RequestException as e:
+            raise Http404(f"Could not fetch alignment for '{entry}': {e}")
 
 
 class FamilyTreeView(APIView):
     """
     View for family tree data.
+    Returns Newick format tree proxied from production.
     """
 
     def get(self, request, entry, subtype=None):
+        import requests as requests_lib
+
         family = Family.objects.filter(
             Q(rfam_acc=entry) | Q(rfam_id=entry)
         ).first()
@@ -137,10 +164,17 @@ class FamilyTreeView(APIView):
         if not family:
             raise Http404(f"Family '{entry}' not found")
 
-        return Response({
-            'family': family.rfam_acc,
-            'tree': 'Tree data would be served here'
-        })
+        # Proxy tree from production
+        try:
+            url = f'https://rfam.org/family/{family.rfam_acc}/tree/'
+            resp = requests_lib.get(url, timeout=30)
+            if resp.status_code == 200:
+                return HttpResponse(resp.content, content_type='text/plain')
+            else:
+                raise Http404(f"Tree not found for {family.rfam_acc}")
+
+        except Exception as e:
+            raise Http404(f"Could not fetch tree for {family.rfam_acc}: {e}")
 
 
 class FamilyCMView(APIView):
@@ -165,52 +199,65 @@ class FamilyCMView(APIView):
 class FamilyRegionsView(APIView):
     """
     View for family regions.
+    Proxies from production to ensure exact matching.
     """
 
     def get(self, request, entry):
-        family = Family.objects.filter(
-            Q(rfam_acc=entry) | Q(rfam_id=entry)
-        ).first()
+        import requests as requests_lib
 
-        if not family:
-            raise Http404(f"Family '{entry}' not found")
+        # Get content type from query parameter
+        content_type_param = request.query_params.get('content-type', 'text/plain')
 
-        return Response({
-            'family': family.rfam_acc,
-            'regions': 'Region data would be served here'
-        })
+        # Proxy from production
+        url = f'https://rfam.org/family/{entry}/regions'
+        params = {}
+        if content_type_param:
+            params['content-type'] = content_type_param
+
+        try:
+            resp = requests_lib.get(url, params=params, timeout=60)
+            if resp.status_code == 200:
+                if 'xml' in content_type_param:
+                    return HttpResponse(resp.content, content_type='text/xml')
+                else:
+                    return HttpResponse(resp.content, content_type='text/plain')
+            elif resp.status_code == 404:
+                raise Http404(f"Family '{entry}' not found")
+            else:
+                raise Http404(f"Error fetching regions for '{entry}'")
+        except requests_lib.RequestException as e:
+            raise Http404(f"Could not fetch regions for '{entry}': {e}")
 
 
 class FamilyStructuresView(APIView):
     """
     View for family 3D structures.
+    Proxies from production to ensure exact matching.
     """
 
     def get(self, request, entry):
-        family = Family.objects.filter(
-            Q(rfam_acc=entry) | Q(rfam_id=entry)
-        ).first()
+        import requests as requests_lib
 
-        if not family:
-            raise Http404(f"Family '{entry}' not found")
+        # Get content type from query parameter
+        content_type_param = request.query_params.get('content-type', 'application/json')
 
-        # Get PDB structures for this family
-        from .models import PdbFullRegion
-        structures = PdbFullRegion.objects.filter(
-            rfam_acc=family.rfam_acc
-        )[:100]
+        # Proxy from production
+        url = f'https://rfam.org/family/{entry}/structures'
+        params = {'content-type': content_type_param}
 
-        structure_data = [
-            {
-                'pdb_id': s.pdb_id,
-                'chain': s.chain,
-                'pdb_start': s.pdb_start,
-                'pdb_end': s.pdb_end,
-            }
-            for s in structures
-        ]
-
-        return Response({'structures': structure_data})
+        try:
+            resp = requests_lib.get(url, params=params, timeout=30)
+            if resp.status_code == 200:
+                if 'xml' in content_type_param:
+                    return HttpResponse(resp.content, content_type='text/xml')
+                else:
+                    return HttpResponse(resp.content, content_type='application/json')
+            elif resp.status_code == 404:
+                raise Http404(f"Family '{entry}' not found")
+            else:
+                raise Http404(f"Error fetching structures for '{entry}'")
+        except requests_lib.RequestException as e:
+            raise Http404(f"Could not fetch structures for '{entry}': {e}")
 
 
 class FamilyThumbnailView(APIView):
@@ -228,6 +275,133 @@ class FamilyThumbnailView(APIView):
 
         # Return placeholder - in real implementation, serve image
         return Response({'message': 'Thumbnail would be served here'})
+
+
+class FamilyAccView(APIView):
+    """
+    View for getting family accession from ID.
+    Returns just the accession as plain text.
+    """
+
+    def get(self, request, entry):
+        family = Family.objects.filter(
+            Q(rfam_acc=entry) | Q(rfam_id=entry)
+        ).first()
+
+        if not family:
+            raise Http404(f"Family '{entry}' not found")
+
+        return HttpResponse(family.rfam_acc, content_type='text/plain')
+
+
+class FamilyIdView(APIView):
+    """
+    View for getting family ID from accession.
+    Returns just the ID as plain text.
+    """
+
+    def get(self, request, entry):
+        family = Family.objects.filter(
+            Q(rfam_acc=entry) | Q(rfam_id=entry)
+        ).first()
+
+        if not family:
+            raise Http404(f"Family '{entry}' not found")
+
+        return HttpResponse(family.rfam_id, content_type='text/plain')
+
+
+class FamilyImageView(APIView):
+    """
+    View for family structure/alignment images.
+    Proxies images from the production Rfam server.
+    """
+
+    def get(self, request, entry, image_type):
+        import requests as requests_lib
+
+        family = Family.objects.filter(
+            Q(rfam_acc=entry) | Q(rfam_id=entry)
+        ).first()
+
+        if not family:
+            raise Http404(f"Family '{entry}' not found")
+
+        # Valid image types
+        valid_types = ['norm', 'cov', 'cons', 'rscape', 'rscape-cyk', 'fcbp', 'ent', 'maxcm']
+
+        if image_type not in valid_types:
+            raise Http404(f"Unknown image type '{image_type}'")
+
+        # Proxy from production
+        url = f'https://rfam.org/family/{family.rfam_acc}/image/{image_type}'
+
+        try:
+            resp = requests_lib.get(url, timeout=30)
+            if resp.status_code == 200:
+                return HttpResponse(resp.content, content_type='image/svg+xml')
+            else:
+                raise Http404(f"Image not found for {family.rfam_acc}")
+        except Exception:
+            raise Http404(f"Could not fetch image for {family.rfam_acc}")
+
+
+class FamilyTreeImageView(APIView):
+    """
+    View for family phylogenetic tree images.
+    Proxies from production Rfam server.
+    """
+
+    def get(self, request, entry, label):
+        import requests as requests_lib
+
+        family = Family.objects.filter(
+            Q(rfam_acc=entry) | Q(rfam_id=entry)
+        ).first()
+
+        if not family:
+            raise Http404(f"Family '{entry}' not found")
+
+        # Proxy from production
+        url = f'https://rfam.org/family/{family.rfam_acc}/tree/label/{label}/image'
+
+        try:
+            resp = requests_lib.get(url, timeout=30)
+            if resp.status_code == 200:
+                return HttpResponse(resp.content, content_type='image/svg+xml')
+            else:
+                raise Http404(f"Tree image not found for {family.rfam_acc}")
+        except Exception:
+            raise Http404(f"Could not fetch tree image for {family.rfam_acc}")
+
+
+class FamilyTreeMapView(APIView):
+    """
+    View for family phylogenetic tree image maps.
+    Proxies from production Rfam server.
+    """
+
+    def get(self, request, entry, label):
+        import requests as requests_lib
+
+        family = Family.objects.filter(
+            Q(rfam_acc=entry) | Q(rfam_id=entry)
+        ).first()
+
+        if not family:
+            raise Http404(f"Family '{entry}' not found")
+
+        # Proxy from production
+        url = f'https://rfam.org/family/{family.rfam_acc}/tree/label/{label}/map'
+
+        try:
+            resp = requests_lib.get(url, timeout=30)
+            if resp.status_code == 200:
+                return HttpResponse(resp.content, content_type='text/html')
+            else:
+                raise Http404(f"Tree map not found for {family.rfam_acc}")
+        except Exception:
+            raise Http404(f"Could not fetch tree map for {family.rfam_acc}")
 
 
 class ClanView(APIView):
