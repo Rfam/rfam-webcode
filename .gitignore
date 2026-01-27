@@ -1,6 +1,18 @@
 # Rfam website source (Perl/Catalyst) - keep local only
 rfam-website/
 
+# Node.js
+node_modules/
+**/node_modules/
+package-lock.json
+rfam-webcode/node_modules/
+
+# Build artifacts (generated CSS - keep .gitkeep files)
+rfam-webcode/api/static/css/*.css
+rfam-webcode/api/static/css/*.css.map
+rfam-webcode/api/static/design-tokens/
+rfam-webcode/staticfiles/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -18,7 +30,8 @@ rfam-webcode/venv/
 
 # IDE
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
 *.swp
 *.swo
 *~
@@ -29,6 +42,8 @@ rfam-webcode/venv/
 htmlcov/
 *.html
 !tests/*.html
+!rfam-webcode/templates/*.html
+!rfam-webcode/api/templates/**/*.html
 
 # OS
 .DS_Store
