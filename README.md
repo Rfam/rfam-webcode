@@ -21,11 +21,41 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
+# Build frontend assets (first time only)
+npm install
+npm run build
+
 # Run the development server
 python manage.py runserver 8888
 ```
 
 The API will be available at http://localhost:8888
+
+### Frontend Development
+
+The project uses the [Visual Framework](https://stable.visual-framework.dev/) (VF) for styling, consistent with EMBL-EBI websites.
+
+```bash
+cd rfam-webcode
+
+# Install Node.js dependencies
+npm install
+
+# Build CSS (compile SCSS to CSS)
+npm run build
+
+# Watch for changes during development
+npm run watch
+```
+
+**Frontend Structure:**
+- `src/scss/main.scss` - Custom Rfam SCSS styles
+- `api/static/css/` - Compiled CSS output
+- `templates/base.html` - Base template with VF components
+- VF Core CSS is loaded from CDN for performance
+
+**Test Visual Framework:**
+Visit http://localhost:8888/vf-test to verify VF components are rendering correctly.
 
 ### Running Tests
 
@@ -58,10 +88,18 @@ rfam-webcode/
 │   │   ├── serializers.py      # DRF serializers
 │   │   ├── forms.py            # Django forms
 │   │   ├── urls.py             # URL routing
-│   │   └── templates/          # HTML templates
+│   │   ├── static/css/         # Compiled CSS assets
+│   │   └── templates/          # App-specific templates
 │   ├── rfam_web/               # Django project settings
 │   │   ├── settings.py         # Configuration
 │   │   └── urls.py             # Root URL config
+│   ├── templates/              # Project-level templates
+│   │   ├── base.html           # Base template (VF components)
+│   │   └── vf_test.html        # VF test page
+│   ├── src/scss/               # SCSS source files
+│   │   └── main.scss           # Custom Rfam styles
+│   ├── package.json            # Node.js dependencies
+│   ├── gulpfile.js             # Gulp build configuration
 │   ├── manage.py               # Django management script
 │   └── requirements.txt        # Python dependencies
 │
@@ -225,6 +263,12 @@ base_url: "http://localhost:8888"
 - Django REST Framework
 - PyMySQL
 - python-dotenv
+
+### Frontend (Node.js)
+- Node.js 18+
+- Gulp 5.x (SCSS compilation)
+- Sass (SCSS compiler)
+- Visual Framework components (loaded from CDN + npm)
 
 ### Test Suite
 - pytest

@@ -935,6 +935,19 @@ class ArticlesView(APIView):
         })
 
 
+class VFTestView(APIView):
+    """
+    Test page to verify Visual Framework components are rendering correctly.
+    """
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request):
+        return Response(
+            template_name='vf_test.html',
+            data={'title': 'VF Test Page'}
+        )
+
+
 def submit_alignment(request):
     """
     View for alignment submission form.

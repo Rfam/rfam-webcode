@@ -107,4 +107,7 @@ urlpatterns = [
 
     # Robots.txt
     path('robots.txt', views.RobotsTxtView.as_view(), name='robots'),
+
+    # VF Test page (for Visual Framework component verification)
+    path('vf-test', views.VFTestView.as_view(), name='vf-test'),
 ]
