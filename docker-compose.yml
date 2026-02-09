@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - CACHE_BUST=1
+        # Uses git clone by default (USE_LOCAL_SOURCE=false)
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - rfam-network
+
+networks:
+  rfam-network:
+    driver: bridge

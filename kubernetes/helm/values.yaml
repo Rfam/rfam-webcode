@@ -1,0 +1,24 @@
+# Database
+database: db-pro
+
+# Proxy
+proxy: proxy-hh
+
+# Hostname
+hostname: rfam.org
+
+# Nginx
+nginxPort: 8000
+nginxTargetPort: 80
+nginxReplicas: 2
+nginxRequestsMemory: "500Mi"
+nginxRequestsCPU: "250m"
+nginxLimitsMemory: "500Mi"
+
+# Rfam webcode (Django/Gunicorn)
+rfamBranch: main
+rnacentralPort: 8000
+rfamReplicas: 1
+rfamRequestsMemory: "1000Mi"
+rfamRequestsCPU: "500m"
+rfamLimitsMemory: "1000Mi"

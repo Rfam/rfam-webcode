@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+*.pyc
+__pycache__
+*.egg-info
+.env
+.env.*
+node_modules
+.pytest_cache
+tests/
+*.md
+.vscode
+.idea

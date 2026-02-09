@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - CACHE_BUST=1
+        # Uses local source code for development
+        - USE_LOCAL_SOURCE=true
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    networks:
+      - rfam-network
+
+networks:
+  rfam-network:
+    driver: bridge
