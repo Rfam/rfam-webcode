@@ -1,0 +1,16 @@
+{
+    "files.watcherExclude": {
+        "**/node_modules/**": true,
+        "**/venv/**": true,
+        "**/.git/objects/**": true
+    },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/__pycache__": true,
+        "**/venv": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/venv": true
+    }
+}

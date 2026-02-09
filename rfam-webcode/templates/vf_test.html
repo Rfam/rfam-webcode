@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}VF Components Test{% endblock %}
+
+{% block breadcrumbs %}
+<nav class="vf-breadcrumbs" aria-label="Breadcrumb">
+    <ul class="vf-breadcrumbs__list">
+        <li class="vf-breadcrumbs__item">
+            <a href="/" class="vf-breadcrumbs__link">Home</a>
+        </li>
+        <li class="vf-breadcrumbs__item" aria-current="page">
+            VF Test
+        </li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="rfam-content">
+    <!-- Hero Section -->
+    <section class="vf-hero vf-hero--primary vf-hero--800 vf-u-margin__bottom--600">
+        <div class="vf-hero__content">
+            <h1 class="vf-hero__heading">Visual Framework Test Page</h1>
+            <p class="vf-hero__subheading">
+                This page demonstrates that VF-Core components are properly configured and rendering.
+            </p>
+        </div>
+    </section>
+
+    <!-- Status Box -->
+    <div class="vf-box vf-box--easy vf-u-margin__bottom--600">
+        <h3 class="vf-box__heading">Configuration Status</h3>
+        <p class="vf-box__text">
+            If you can see styled components on this page, VF-Core is working correctly.
+        </p>
+    </div>
+
+    <!-- Component Grid -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Component Examples</h2>
+
+    <div class="vf-grid vf-grid__col-3 vf-u-margin__bottom--600">
+        <!-- Card 1 -->
+        <article class="vf-card vf-card--brand">
+            <div class="vf-card__content | vf-stack vf-stack--400">
+                <h3 class="vf-card__heading">
+                    <a href="#" class="vf-card__link">RF00001 - 5S ribosomal RNA</a>
+                </h3>
+                <p class="vf-card__text">
+                    5S ribosomal RNA is a component of the large ribosomal subunit.
+                </p>
+                <span class="vf-badge vf-badge--primary">Gene</span>
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="vf-card vf-card--brand">
+            <div class="vf-card__content | vf-stack vf-stack--400">
+                <h3 class="vf-card__heading">
+                    <a href="#" class="vf-card__link">RF00005 - tRNA</a>
+                </h3>
+                <p class="vf-card__text">
+                    Transfer RNA is an adaptor molecule composed of RNA.
+                </p>
+                <span class="vf-badge vf-badge--secondary">Gene</span>
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="vf-card vf-card--brand">
+            <div class="vf-card__content | vf-stack vf-stack--400">
+                <h3 class="vf-card__heading">
+                    <a href="#" class="vf-card__link">RF00177 - SSU rRNA</a>
+                </h3>
+                <p class="vf-card__text">
+                    Small subunit ribosomal RNA found in both prokaryotes and eukaryotes.
+                </p>
+                <span class="vf-badge vf-badge--tertiary">Gene</span>
+            </div>
+        </article>
+    </div>
+
+    <!-- Buttons Section -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Button Styles</h2>
+
+    <div class="vf-stack vf-stack--400 vf-u-margin__bottom--600">
+        <div>
+            <a href="#" class="vf-button vf-button--primary">Primary Button</a>
+            <a href="#" class="vf-button vf-button--secondary">Secondary Button</a>
+            <a href="#" class="vf-button vf-button--tertiary">Tertiary Button</a>
+        </div>
+        <div>
+            <a href="#" class="vf-button vf-button--primary vf-button--sm">Small</a>
+            <a href="#" class="vf-button vf-button--primary">Default</a>
+            <a href="#" class="vf-button vf-button--primary vf-button--lg">Large</a>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Form Components</h2>
+
+    <div class="vf-box vf-box--normal vf-u-margin__bottom--600">
+        <form class="vf-form | vf-stack vf-stack--400">
+            <div class="vf-form__item">
+                <label class="vf-form__label" for="search-input">Search Term</label>
+                <input type="text" id="search-input" class="vf-form__input" placeholder="Enter RNA family name...">
+            </div>
+
+            <div class="vf-form__item">
+                <label class="vf-form__label" for="type-select">RNA Type</label>
+                <select id="type-select" class="vf-form__select">
+                    <option value="">All types</option>
+                    <option value="gene">Gene</option>
+                    <option value="cis-reg">Cis-regulatory</option>
+                    <option value="intron">Intron</option>
+                </select>
+            </div>
+
+            <div class="vf-form__item">
+                <label class="vf-form__label">
+                    <input type="checkbox" class="vf-form__checkbox">
+                    Include deprecated families
+                </label>
+            </div>
+
+            <div class="vf-form__item">
+                <button type="submit" class="vf-button vf-button--primary">Search</button>
+                <button type="reset" class="vf-button vf-button--secondary">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Badges Section -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Badge Variants</h2>
+
+    <div class="vf-u-margin__bottom--600">
+        <span class="vf-badge">Default</span>
+        <span class="vf-badge vf-badge--primary">Primary</span>
+        <span class="vf-badge vf-badge--secondary">Secondary</span>
+        <span class="vf-badge vf-badge--tertiary">Tertiary</span>
+    </div>
+
+    <!-- Custom Rfam Styles -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Rfam Custom Components</h2>
+
+    <div class="vf-grid vf-grid__col-2 vf-u-margin__bottom--600">
+        <div>
+            <h3>Sequence Display</h3>
+            <div class="rfam-sequence">
+GCGGAUUUAGCUCAGUUGGGAGAGCGCCAGACU
+GAAGAUCUGGAGGUCCUGUGUUCGAUCCACAGA
+AUUCGCACCA</div>
+        </div>
+        <div>
+            <h3>Alignment Display</h3>
+            <div class="rfam-alignment">
+seq1   GCGGAUUUAGCUCAGUUGGG
+seq2   GCGGAUUUAGCUCAGUUGGG
+seq3   GCGGAUUUAGCUCAGUUGGG
+#=GC   ::::::::::::::::::::
+</div>
+        </div>
+    </div>
+
+    <!-- Typography Test -->
+    <h2 class="vf-section-header__heading vf-u-margin__bottom--400">Typography</h2>
+
+    <div class="vf-content vf-u-margin__bottom--600">
+        <h1>Heading Level 1</h1>
+        <h2>Heading Level 2</h2>
+        <h3>Heading Level 3</h3>
+        <h4>Heading Level 4</h4>
+        <p>
+            This is a paragraph of text demonstrating the default typography styles.
+            The Visual Framework provides consistent, accessible typography across EMBL-EBI websites.
+        </p>
+        <ul>
+            <li>Unordered list item 1</li>
+            <li>Unordered list item 2</li>
+            <li>Unordered list item 3</li>
+        </ul>
+        <ol>
+            <li>Ordered list item 1</li>
+            <li>Ordered list item 2</li>
+            <li>Ordered list item 3</li>
+        </ol>
+    </div>
+
+    <!-- Success Message -->
+    <div class="vf-box vf-box--green vf-u-margin__bottom--600">
+        <h3 class="vf-box__heading">Success!</h3>
+        <p class="vf-box__text">
+            All Visual Framework components are rendering correctly. The SCSS compilation
+            pipeline is working and static assets are being served properly.
+        </p>
+    </div>
+</div>
+{% endblock %}

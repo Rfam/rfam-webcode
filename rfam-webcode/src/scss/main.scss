@@ -1,0 +1,118 @@
+/**
+ * Rfam Web - Custom Stylesheet
+ * Extends Visual Framework components with Rfam-specific styles
+ *
+ * VF Core CSS is loaded from CDN in the base template
+ * This file contains only Rfam customizations
+ */
+
+// Rfam brand colors
+$rfam-primary: #8B0000;
+$rfam-secondary: #2E7D32;
+$rfam-accent: #1565C0;
+
+// Custom spacing
+$rfam-spacing-small: 0.5rem;
+$rfam-spacing-medium: 1rem;
+$rfam-spacing-large: 2rem;
+
+// Typography adjustments
+$rfam-font-family-mono: 'Courier New', monospace;
+
+// Rfam-specific header styling
+.rfam-header {
+  background-color: $rfam-primary;
+
+  .vf-logo {
+    max-height: 60px;
+  }
+}
+
+// Custom styling for sequence displays
+.rfam-sequence {
+  font-family: $rfam-font-family-mono;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background-color: #f5f5f5;
+  padding: $rfam-spacing-medium;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+// Family card styling
+.rfam-family-card {
+  border-left: 4px solid $rfam-primary;
+
+  &:hover {
+    border-left-color: $rfam-secondary;
+  }
+}
+
+// Alignment display
+.rfam-alignment {
+  font-family: $rfam-font-family-mono;
+  font-size: 0.75rem;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  padding: $rfam-spacing-medium;
+  overflow-x: auto;
+}
+
+// Badge variations for RNA types
+.rfam-badge--rna-type {
+  background-color: $rfam-secondary;
+  color: white;
+}
+
+.rfam-badge--clan {
+  background-color: $rfam-accent;
+  color: white;
+}
+
+// Form improvements
+.rfam-form {
+  .vf-form__input {
+    border-radius: 4px;
+  }
+
+  .vf-form__label {
+    font-weight: 600;
+  }
+}
+
+// Content area styling
+.rfam-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $rfam-spacing-large;
+}
+
+// Skip link for accessibility
+.vf-skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: $rfam-primary;
+  color: white;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  transition: top 0.3s;
+
+  &:focus {
+    top: 0;
+  }
+}
+
+// Custom hero styling for Rfam
+.rfam-hero {
+  background: linear-gradient(135deg, $rfam-primary 0%, darken($rfam-primary, 10%) 100%);
+  color: white;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .rfam-content {
+    padding: $rfam-spacing-medium;
+  }
+}

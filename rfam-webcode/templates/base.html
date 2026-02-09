@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="vf-body">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{% block title %}Rfam{% endblock %} - Rfam Database</title>
+    <meta name="description" content="{% block meta_description %}Rfam is a collection of RNA families, each represented by multiple sequence alignments, consensus secondary structures and covariance models.{% endblock %}">
+
+    <!-- VF Core CSS from CDN -->
+    <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.14/css/styles.css">
+
+    <!-- Rfam Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+
+    <!-- Additional stylesheets -->
+    {% block extra_css %}{% endblock %}
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://assets.emblstatic.net">
+</head>
+<body class="vf-body">
+    <!-- Skip to main content for accessibility -->
+    <a class="vf-skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Header -->
+    {% block header %}
+    <header class="vf-header rfam-header">
+        <div class="vf-header__inner">
+            <a href="/" class="vf-logo">
+                <span class="vf-logo__text">Rfam</span>
+            </a>
+
+            <nav class="vf-navigation vf-navigation--main">
+                <ul class="vf-navigation__list">
+                    <li class="vf-navigation__item">
+                        <a href="/" class="vf-navigation__link">Home</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/search" class="vf-navigation__link">Search</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/family" class="vf-navigation__link">Browse</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/submit_alignment" class="vf-navigation__link">Submit</a>
+                    </li>
+                    <li class="vf-navigation__item">
+                        <a href="/help" class="vf-navigation__link">Help</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    {% endblock %}
+
+    <!-- Breadcrumbs -->
+    {% block breadcrumbs %}{% endblock %}
+
+    <!-- Main content -->
+    <main id="main-content" class="vf-body vf-u-margin__top--800">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% block footer %}
+    <footer class="vf-footer">
+        <div class="vf-footer__inner">
+            <div class="vf-grid vf-grid__col-3">
+                <div class="vf-grid__col">
+                    <h4 class="vf-footer__heading">About Rfam</h4>
+                    <p class="vf-footer__text">
+                        Rfam is a collection of RNA families, each represented by multiple
+                        sequence alignments, consensus secondary structures and covariance models.
+                    </p>
+                </div>
+                <div class="vf-grid__col">
+                    <h4 class="vf-footer__heading">Links</h4>
+                    <ul class="vf-footer__list">
+                        <li class="vf-footer__item">
+                            <a href="https://www.ebi.ac.uk" class="vf-footer__link">EMBL-EBI</a>
+                        </li>
+                        <li class="vf-footer__item">
+                            <a href="https://github.com/Rfam" class="vf-footer__link">GitHub</a>
+                        </li>
+                        <li class="vf-footer__item">
+                            <a href="/help" class="vf-footer__link">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="vf-grid__col">
+                    <h4 class="vf-footer__heading">Contact</h4>
+                    <p class="vf-footer__text">
+                        <a href="mailto:rfam-help@ebi.ac.uk" class="vf-footer__link">rfam-help@ebi.ac.uk</a>
+                    </p>
+                </div>
+            </div>
+            <div class="vf-footer__legal">
+                <p class="vf-footer__legal-text">
+                    &copy; {% now "Y" %} EMBL-EBI. Licensed under Apache 2.0.
+                </p>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+
+    <!-- VF Core JavaScript from CDN -->
+    <script src="https://assets.emblstatic.net/vf/v2.5.14/scripts/scripts.js"></script>
+
+    <!-- Additional scripts -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

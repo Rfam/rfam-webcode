@@ -1,0 +1,51 @@
+{
+  "name": "rfam-web-frontend",
+  "version": "1.0.0",
+  "description": "Frontend assets for Rfam Web using Visual Framework",
+  "scripts": {
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "dev": "gulp watch"
+  },
+  "dependencies": {
+    "@visual-framework/vf-core": "*",
+    "@visual-framework/vf-design-tokens": "*",
+    "@visual-framework/vf-sass-config": "*",
+    "@visual-framework/vf-body": "*",
+    "@visual-framework/vf-content": "*",
+    "@visual-framework/vf-button": "*",
+    "@visual-framework/vf-box": "*",
+    "@visual-framework/vf-card": "*",
+    "@visual-framework/vf-grid": "*",
+    "@visual-framework/vf-stack": "*",
+    "@visual-framework/vf-hero": "*",
+    "@visual-framework/vf-header": "*",
+    "@visual-framework/vf-footer": "*",
+    "@visual-framework/vf-logo": "*",
+    "@visual-framework/vf-navigation": "*",
+    "@visual-framework/vf-breadcrumbs": "*",
+    "@visual-framework/vf-badge": "*",
+    "@visual-framework/vf-form": "*",
+    "@visual-framework/vf-form__input": "*",
+    "@visual-framework/vf-form__select": "*",
+    "@visual-framework/vf-form__checkbox": "*",
+    "@visual-framework/vf-form__label": "*",
+    "@visual-framework/vf-form__item": "*",
+    "@visual-framework/vf-u-fullbleed": "*",
+    "@visual-framework/vf-section-header": "*"
+  },
+  "devDependencies": {
+    "gulp": "^5.0.0",
+    "gulp-sass": "^5.1.0",
+    "gulp-postcss": "^10.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^7.0.0",
+    "sass": "^1.77.0",
+    "del": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
