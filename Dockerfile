@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Set build arguments for flexibility
-ARG REPO_URL=https://github.com/Rfam/rfam-django-K8s.git
+ARG REPO_URL=https://github.com/Rfam/rfam-webcode.git
 ARG BRANCH=main
 ARG USE_LOCAL_SOURCE=false
 
