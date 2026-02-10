@@ -18,7 +18,7 @@ kind: ConfigMap
 metadata:
   name: nginx-config
 data:
-  local.conf: |-
+  default.conf: |-
     upstream rfam-webcode {
         server rfam-webcode:{{ .Values.rnacentralPort }};
     }
@@ -89,8 +89,8 @@ spec:
             - containerPort: {{ .Values.nginxTargetPort }}
           volumeMounts:
             - name: nginx-config
-              mountPath: /etc/nginx/conf.d/local.conf
-              subPath: local.conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
       restartPolicy: Always
       volumes:
         - name: nginx-config

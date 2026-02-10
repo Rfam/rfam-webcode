@@ -44,7 +44,7 @@ python manage.py collectstatic --noinput 2>/dev/null || echo "Warning: collectst
 echo "=== Testing database connectivity ==="
 if [ -n "${RFAM_DB_HOST:-}" ]; then
     DB_PORT="${RFAM_DB_PORT:-3306}"
-    if nc -z "${RFAM_DB_HOST}" "${DB_PORT}" 2>/dev/null; then
+    if nc -z -w 5 "${RFAM_DB_HOST}" "${DB_PORT}" 2>/dev/null; then
         echo "  Database host ${RFAM_DB_HOST}:${DB_PORT} is reachable"
 
         python -c "

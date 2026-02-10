@@ -1,16 +1,16 @@
 # Database
-database: db-pro
+database: db-dev
 
 # Proxy
 proxy: proxy-hh
 
 # Hostname
-hostname: rfam.org
+hostname: beta.rfam.org
 
 # Nginx
 nginxPort: 8000
 nginxTargetPort: 80
-nginxReplicas: 2
+nginxReplicas: 1
 nginxRequestsMemory: "500Mi"
 nginxRequestsCPU: "250m"
 nginxLimitsMemory: "500Mi"

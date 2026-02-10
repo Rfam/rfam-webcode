@@ -1,8 +1,0 @@
-# Database
-database: db-dev
-
-# Hostname
-hostname: preview.rfam.org
-
-# Nginx
-nginxReplicas: 1
