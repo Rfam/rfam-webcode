@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
 ARG REPO_URL=https://github.com/Rfam/rfam-webcode.git
 ARG BRANCH=main
 ARG USE_LOCAL_SOURCE=false
+ARG CACHE_BUST=0
 
 # Copy source code - either from local context or git clone
 RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
