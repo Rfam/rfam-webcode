@@ -24,25 +24,19 @@ RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
         echo "Using local source code..."; \
         mkdir -p /app; \
     else \
-        echo "Cloning source code from git..."; \
+        echo "Cloning source code from git..." && \
         apt-get update && apt-get install -y git && \
-        git clone --depth 1 --branch ${BRANCH} ${REPO_URL} /tmp/rfam-source || \
-        git clone --depth 1 --branch main ${REPO_URL} /tmp/rfam-source || \
-        git clone --depth 1 ${REPO_URL} /tmp/rfam-source; \
-        mkdir -p /app && cp -r /tmp/rfam-source/rfam-webcode/* /app/ && rm -rf /tmp/rfam-source; \
+        (git clone --depth 1 --branch ${BRANCH} ${REPO_URL} /tmp/rfam-source || \
+         git clone --depth 1 --branch main ${REPO_URL} /tmp/rfam-source || \
+         git clone --depth 1 ${REPO_URL} /tmp/rfam-source) && \
+        mkdir -p /app && \
+        cp -r /tmp/rfam-source/rfam-webcode/* /app/ && \
+        rm -rf /tmp/rfam-source && \
         apt-get purge -y git && apt-get autoremove -y; \
     fi
 
 # Copy local source if using local mode
 COPY . /tmp/local-source/
-RUN echo "=== DEBUG: USE_LOCAL_SOURCE=$USE_LOCAL_SOURCE ===" && \
-    echo "=== DEBUG: /tmp/local-source/ top-level ===" && \
-    ls -la /tmp/local-source/ && \
-    echo "=== DEBUG: /tmp/local-source/rfam-webcode/ (if exists) ===" && \
-    ls -la /tmp/local-source/rfam-webcode/ 2>/dev/null || echo "(no rfam-webcode subdir)" && \
-    echo "=== DEBUG: /app/ before copy ===" && \
-    ls -la /app/ 2>/dev/null || echo "(no /app yet)"
-
 RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
         cp -r /tmp/local-source/rfam-webcode/* /app/ 2>/dev/null || \
         cp -r /tmp/local-source/* /app/; \
@@ -51,8 +45,6 @@ RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
 
 # Set working directory
 WORKDIR /app
-
-RUN echo "=== DEBUG: /app/ after copy ===" && ls -la /app/
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt gunicorn
