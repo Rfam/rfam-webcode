@@ -13,35 +13,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set build arguments for flexibility
-ARG REPO_URL=https://github.com/Rfam/rfam-django-K8s.git
-ARG BRANCH=main
-ARG USE_LOCAL_SOURCE=false
-
-# Copy source code - either from local context or git clone
-RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
-        echo "Using local source code..."; \
-        mkdir -p /app; \
-    else \
-        echo "Cloning source code from git..."; \
-        apt-get update && apt-get install -y git && \
-        git clone --depth 1 --branch ${BRANCH} ${REPO_URL} /tmp/rfam-source || \
-        git clone --depth 1 --branch main ${REPO_URL} /tmp/rfam-source || \
-        git clone --depth 1 ${REPO_URL} /tmp/rfam-source; \
-        mkdir -p /app && cp -r /tmp/rfam-source/rfam-webcode/* /app/ && rm -rf /tmp/rfam-source; \
-        apt-get purge -y git && apt-get autoremove -y; \
-    fi
-
-# Copy local source if using local mode
-COPY . /tmp/local-source/
-RUN if [ "$USE_LOCAL_SOURCE" = "true" ]; then \
-        cp -r /tmp/local-source/rfam-webcode/* /app/ 2>/dev/null || \
-        cp -r /tmp/local-source/* /app/; \
-    fi && \
-    rm -rf /tmp/local-source
-
-# Set working directory
 WORKDIR /app
+
+# Copy application source from build context
+COPY rfam-webcode/ .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt gunicorn

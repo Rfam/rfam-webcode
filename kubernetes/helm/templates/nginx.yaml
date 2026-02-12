@@ -18,7 +18,7 @@ kind: ConfigMap
 metadata:
   name: nginx-config
 data:
-  local.conf: |-
+  default.conf: |-
     upstream rfam-webcode {
         server rfam-webcode:{{ .Values.rnacentralPort }};
     }
@@ -27,11 +27,6 @@ data:
         listen {{ .Values.nginxTargetPort }};
         access_log /dev/stdout;
         error_log /dev/stderr;
-
-        location /static/ {
-            autoindex on;
-            alias /srv/rfam/static/;
-        }
 
         location / {
             proxy_pass http://rfam-webcode;
@@ -89,8 +84,8 @@ spec:
             - containerPort: {{ .Values.nginxTargetPort }}
           volumeMounts:
             - name: nginx-config
-              mountPath: /etc/nginx/conf.d/local.conf
-              subPath: local.conf
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
       restartPolicy: Always
       volumes:
         - name: nginx-config
