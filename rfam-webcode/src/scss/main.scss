@@ -6,10 +6,19 @@
  * This file contains only Rfam customizations
  */
 
-// Rfam brand colors
+// Rfam brand colors — modern palette
+$rfam-logo-primary: #611701;
 $rfam-primary: #8B0000;
-$rfam-secondary: #2E7D32;
-$rfam-accent: #1565C0;
+$rfam-dark: #1a1a2e;
+$rfam-green: #059669;
+$rfam-blue: #2563eb;
+$rfam-gray-50: #f8fafc;
+$rfam-gray-100: #f1f5f9;
+$rfam-gray-200: #e2e8f0;
+$rfam-gray-300: #cbd5e1;
+$rfam-gray-500: #64748b;
+$rfam-gray-700: #334155;
+$rfam-gray-900: #0f172a;
 
 // Custom spacing
 $rfam-spacing-small: 0.5rem;
@@ -19,100 +28,59 @@ $rfam-spacing-large: 2rem;
 // Typography adjustments
 $rfam-font-family-mono: 'Courier New', monospace;
 
-// Rfam-specific header styling
+
 .rfam-header {
-  background-color: $rfam-primary;
+  border-bottom: 1px solid $rfam-gray-200;
+
+  // Add gap between first flex item and second
+
+  .vf-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem $rfam-spacing-large;
+  }
 
   .vf-logo {
     max-height: 60px;
+    text-decoration: none;
+  }
+
+  .logo{
+    height: 38px;
+
+  }
+
+  .vf-navigation__list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    justify-content: space-between;
+  }
+
+  .vf-navigation__link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    color: $rfam-gray-700;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background-color: $rfam-gray-100;
+      color: $rfam-gray-900;
+      text-decoration: none;
+    }
   }
 }
 
-// Custom styling for sequence displays
-.rfam-sequence {
-  font-family: $rfam-font-family-mono;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  background-color: #f5f5f5;
-  padding: $rfam-spacing-medium;
-  border-radius: 4px;
-  overflow-x: auto;
-  white-space: pre;
-}
 
-// Family card styling
-.rfam-family-card {
-  border-left: 4px solid $rfam-primary;
 
-  &:hover {
-    border-left-color: $rfam-secondary;
-  }
-}
 
-// Alignment display
-.rfam-alignment {
-  font-family: $rfam-font-family-mono;
-  font-size: 0.75rem;
-  background-color: #fafafa;
-  border: 1px solid #e0e0e0;
-  padding: $rfam-spacing-medium;
-  overflow-x: auto;
-}
-
-// Badge variations for RNA types
-.rfam-badge--rna-type {
-  background-color: $rfam-secondary;
-  color: white;
-}
-
-.rfam-badge--clan {
-  background-color: $rfam-accent;
-  color: white;
-}
-
-// Form improvements
-.rfam-form {
-  .vf-form__input {
-    border-radius: 4px;
-  }
-
-  .vf-form__label {
-    font-weight: 600;
-  }
-}
-
-// Content area styling
-.rfam-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: $rfam-spacing-large;
-}
-
-// Skip link for accessibility
-.vf-skip-link {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  background: $rfam-primary;
-  color: white;
-  padding: 0.5rem 1rem;
-  z-index: 1000;
-  transition: top 0.3s;
-
-  &:focus {
-    top: 0;
-  }
-}
-
-// Custom hero styling for Rfam
-.rfam-hero {
-  background: linear-gradient(135deg, $rfam-primary 0%, darken($rfam-primary, 10%) 100%);
-  color: white;
-}
-
-// Responsive adjustments
-@media (max-width: 768px) {
-  .rfam-content {
-    padding: $rfam-spacing-medium;
-  }
-}
+ @import 'homepage';

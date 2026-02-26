@@ -861,6 +861,7 @@ class HomeView(APIView):
     """
     View for home page.
     """
+    renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request):
         try:
@@ -873,20 +874,34 @@ class HomeView(APIView):
         except Exception:
             release_info = {}
 
-        return Response({
-            'name': 'Rfam',
-            'description': 'The RNA families database',
-            'release': release_info,
-            'links': {
-                'families': '/families',
-                'clans': '/clans',
-                'motifs': '/motifs',
-                'genomes': '/genomes',
-                'search': '/search',
-                'browse': '/browse',
-                'help': '/help',
-            }
-        })
+        featured_families = [
+            {
+                'accession': 'RF00001',
+                'name': '5S ribosomal RNA',
+                'description': 'A universal component of the large ribosomal subunit found in all domains of life.',
+                'type': 'Gene',
+            },
+            {
+                'accession': 'RF00005',
+                'name': 'tRNA',
+                'description': 'Transfer RNA adaptor molecules that deliver amino acids to the ribosome during translation.',
+                'type': 'Gene',
+            },
+            {
+                'accession': 'RF00177',
+                'name': 'SSU rRNA (bacteria)',
+                'description': 'Small subunit ribosomal RNA found in bacterial ribosomes, used widely in phylogenetics.',
+                'type': 'Gene',
+            },
+        ]
+
+        return Response(
+            template_name='home.html',
+            data={
+                'release': release_info,
+                'featured_families': featured_families,
+            },
+        )
 
 
 class SpecialPageView(APIView):
